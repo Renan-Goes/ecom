@@ -7,4 +7,8 @@ public class SecurityProperties {
     public static final String HEADER_STRING = "Authorization";
     public static final String SIGN_UP_URL = "/auth/signup";
     public static final String SWAGGER_URL = "/swagger-ui/**";
+    public static final String EXTERNAL_API_URL = "http://localhost:8080/product";
+    public static final String ENDPOINT_ADD_PRODUCT = EXTERNAL_API_URL;
+    public static final String ENDPOINT_REMOVE_PRODUCT = EXTERNAL_API_URL + "/removeProduct/";
+    public static final String ENDPOINT_UPDATE_PRODUCT = EXTERNAL_API_URL + "/updateProduct/";
 }

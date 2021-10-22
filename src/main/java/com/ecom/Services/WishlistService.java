@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ecom.Config.Security.SecurityProperties;
 import com.ecom.Forms.WishlistForm;
 import com.ecom.Handlers.ExceptionDetails;
 import com.ecom.Models.Product;
@@ -67,7 +68,7 @@ public class WishlistService {
             RestTemplate restTemplate = new RestTemplate();
             
             try {
-                restTemplate.delete("http://localhost:8080/product/removeProduct/" + 
+                restTemplate.delete(SecurityProperties.ENDPOINT_REMOVE_PRODUCT + 
                         productInList.getProductId());
             }
             catch(Exception e) {
