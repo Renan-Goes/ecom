@@ -85,7 +85,6 @@ public class UserService {
         List<Product> listOfProductsFromUser = productRepository.findByUserUserName(user.getUserName());
 
         for(Product productFromUser : listOfProductsFromUser) {
-            productRepository.deleteById(productFromUser.getProductId());
             
             RestTemplate restTemplate = new RestTemplate();
             try {
@@ -96,9 +95,11 @@ public class UserService {
                 ExceptionDetails exception = new ExceptionDetails("Bad Gateway", 502, 
                         "Could not communicate with external server.", 
                         "Either the server is down or the product has not been registered.", new Date());
-
+                        
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
             }
+            
+            productRepository.deleteById(productFromUser.getProductId());
         }
 
         userRepository.deleteById(user.getUserId());

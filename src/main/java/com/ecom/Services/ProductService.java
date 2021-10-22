@@ -48,25 +48,26 @@ public class ProductService {
         }
 
         product.setUser(seller);
+        productRepository.save(product);
 
-        try {
-            productRepository.save(product);
-    
+        try {    
             ProductRegister productToRegist = new ProductRegister(product);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForObject(SecurityProperties.ENDPOINT_ADD_PRODUCT, productToRegist, 
                     ProductRegister.class);
-
+    
             ProductDTO productDTO = new ProductDTO(seller, product);
             
             log.info("Product successfully added");
             log.debug(product.getName() + " was added by user '" + seller.getUserName() +"'");
-
+    
             return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
         }
         catch(Exception e) {
             log.debug("Could not communicate with external API");
 
+            productRepository.deleteById(product.getProductId());
+            
             ExceptionDetails exception = new ExceptionDetails("Bad Gateway", 502, 
                     "Could not communicate with Registering API.", 
                     "Try again or wait until server is up again.", new Date());
@@ -74,7 +75,8 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exception);
         }
     }
-
+    
+            
     public ResponseEntity<?> getProducts(Pageable paging) {
         Page<Product> allProducts = productRepository.findAll(paging);
         Page<ProductDTO> pageWithProducts = ProductDTO.convertPage(allProducts);
@@ -207,20 +209,20 @@ public class ProductService {
 
             restTemplate.put(SecurityProperties.ENDPOINT_UPDATE_PRODUCT + foundProduct.getProductId(), 
                     productToUpdateInRegist, ProductRegister.class);      
-                    
-            productRepository.save(foundProduct);
-
-            log.info("Product modified");
-            log.debug("Product with ID '" + foundProduct.getProductId() + "' was modified");
-
-            return ResponseEntity.ok().body(productDTO);      
-        }
+                }
         catch(Exception e) {
             ExceptionDetails exception = new ExceptionDetails("Bad Gateway", 502, 
-                    "Could not communicate with Registering API.", 
-                    "Either the server is down or the ID is incorrect.", new Date());
-
+            "Could not communicate with Registering API.", 
+            "Either the server is down or the ID is incorrect.", new Date());
+            
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exception);
         }
+                
+        productRepository.save(foundProduct);
+
+        log.info("Product modified");
+        log.debug("Product with ID '" + foundProduct.getProductId() + "' was modified");
+
+        return ResponseEntity.ok().body(productDTO);      
     }
 }
