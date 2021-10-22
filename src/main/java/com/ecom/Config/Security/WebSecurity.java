@@ -30,8 +30,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().authorizeRequests().antMatchers(HttpMethod.POST, SecurityProperties.SIGN_UP_URL).permitAll()
-                .antMatchers(SecurityProperties.SWAGGER_URL).permitAll().anyRequest().authenticated().and().csrf()
-                .disable().addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .antMatchers(SecurityProperties.SWAGGER_URL1, SecurityProperties.SWAGGER_URL2,
+                SecurityProperties.SWAGGER_URL3, SecurityProperties.SWAGGER_URL4).permitAll().
+                anyRequest().authenticated().and().csrf().disable().addFilter(
+                new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
