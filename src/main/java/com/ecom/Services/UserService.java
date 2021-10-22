@@ -1,6 +1,7 @@
 package com.ecom.Services;
 
 import java.util.Date;
+import java.util.Optional;
 
 import com.ecom.Handlers.ExceptionDetails;
 import com.ecom.Models.User;
@@ -22,18 +23,20 @@ public class UserService {
     }
     
     public ResponseEntity<?> createUser(User user) {
-        User foundUser = userRepository.findByEmail(user.getEmail()).get();
-        System.out.println("Found user: " + foundUser);
+        System.out.println("User email: " + user.getEmail());
+        Optional<User> foundUserOptional = userRepository.findByEmail(user.getEmail());
 
-        if(foundUser != null) {            
+        if(!foundUserOptional.isEmpty()) {
+            
             ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
                     "User already exists.", "Use another email.", new Date());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
         }
 
-        foundUser = userRepository.findByUserName(user.getUserName());
-        if (foundUser != null) {
+        foundUserOptional = userRepository.findByUserName(user.getUserName());
+
+        if (!foundUserOptional.isEmpty()) {
             ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
                     "Username already exists.", "Use another username.", new Date());
 

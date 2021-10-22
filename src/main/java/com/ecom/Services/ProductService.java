@@ -2,6 +2,7 @@ package com.ecom.Services;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 import com.ecom.Forms.UpdateProductForm;
 import com.ecom.Handlers.ExceptionDetails;
@@ -74,19 +75,23 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getProductByUser(String userName, Pageable paging) {
-        User foundUser = userRepository.findByUserName(userName);
+        Optional<User> foundUserOptional = userRepository.findByUserName(userName);
 
-        if(foundUser != null) {
-            Page<Product> listOfProductsOfUser = productRepository.findByUserUserId(foundUser.getUserId(), paging);
-            Page<ProductDTO> pageWithProducts = ProductDTO.convertPageByUser(listOfProductsOfUser, foundUser);
+        if(!foundUserOptional.isPresent()) {
             
-            return ResponseEntity.ok().body(pageWithProducts.getContent());
+            ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
+            "User does not exist", "Please search for items of an existing user", new Date());
+            
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
         }
 
-        ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
-                "User does not exist", "Please search for items of an existing user", new Date());
+        Page<Product> listOfProductsOfUser = productRepository.findByUserUserId(
+            foundUserOptional.get().getUserId(), paging);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+        Page<ProductDTO> pageWithProducts = ProductDTO.convertPageByUser(listOfProductsOfUser, 
+                foundUserOptional.get());
+        
+        return ResponseEntity.ok().body(pageWithProducts.getContent());
     }
 
     public ResponseEntity<?> removeProduct(String productId, String userName) {
