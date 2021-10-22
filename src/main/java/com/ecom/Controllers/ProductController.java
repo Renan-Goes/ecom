@@ -23,10 +23,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
+@Api(value="Product", description="Manages products to add, delete, list all, " +
+        "list by user and list by part of name.", tags={ "Product" })
 public class ProductController {
      
     private ProductRepository productRepository;
@@ -41,6 +47,7 @@ public class ProductController {
 
     @PostMapping("/addproduct")
     @CacheEvict(value="productsCache", allEntries=true)
+    @ApiOperation(value="Add a single product", tags={ "Product" })
     @Transactional
     public ResponseEntity<?> addProduct(@RequestBody @Valid ProductForm form) {
         Product product = form.convert();
@@ -50,6 +57,7 @@ public class ProductController {
 
     @GetMapping("/products")
     @Cacheable("productsCache")
+    @ApiOperation(value="Get all products paged", tags={ "Product" })
     public ResponseEntity<?> getProducts(@RequestParam(required=false, defaultValue="0") int page, 
             @RequestParam(required=false, defaultValue="10") int quantity) {
         
@@ -59,6 +67,7 @@ public class ProductController {
     }
     
     @GetMapping("/products/{userName}")
+    @ApiOperation(value="Get all products from a user paged", tags={ "Product" })
     public ResponseEntity<?> getProductByUser(@PathVariable String userName, 
             @RequestParam(required=false, defaultValue="0") int page, 
             @RequestParam(required=false, defaultValue="10") int quantity) {
@@ -70,6 +79,7 @@ public class ProductController {
 
     @DeleteMapping("/products/{productId}")
     @Transactional
+    @ApiOperation(value="Remove a product", tags={ "Product" })
     public ResponseEntity<?> removeProductForSale(@PathVariable String productId) {
         
         GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
@@ -79,6 +89,7 @@ public class ProductController {
     }
     
     @GetMapping("/productsearch/{productName}")
+    @ApiOperation(value="Get all products by part of its name paged", tags={ "Product" })
     public ResponseEntity<?> getProductsLikeByName(@PathVariable String productName, 
             @RequestParam(required=false, defaultValue="0") int page, 
             @RequestParam(required=false, defaultValue="10") int quantity) {
@@ -88,7 +99,8 @@ public class ProductController {
         return productService.getProductsLikeByName(paging, productName);
     }     
 
-    @RequestMapping(value="/updateproduct/{productId}")
+    @RequestMapping(value="/updateproduct/{productId}", method=RequestMethod.PUT)
+    @ApiOperation(value="Update fields of a product by its id in the url and fields as json", tags={ "Product" })
     @Transactional
     public ResponseEntity<?> updateProduct(@PathVariable String productId, 
             @RequestBody UpdateProductForm form) {

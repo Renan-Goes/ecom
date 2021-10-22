@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController    
+@Api(value="User", description="Manages adding and deleting users.", tags={ "User" })
 public class UserController {
      
     private UserRepository userRepository;
@@ -35,6 +39,7 @@ public class UserController {
 
     @PostMapping("/auth/signup")
     @Transactional
+    @ApiOperation(value="Creates user with unique email and username", tags={ "User" })
     public ResponseEntity<?> createUser(@RequestBody @Valid SignUpForm form) {
         User user = form.convert();
         return userService.createUser(user);
@@ -42,6 +47,7 @@ public class UserController {
 
     @DeleteMapping("/auth/deleteaccount")
     @Transactional
+    @ApiOperation(value="Deletes the user alongside the products it has for sale", tags={ "Product" })
     public ResponseEntity<?> deleteUser() {
         return userService.deleteUser();
     }

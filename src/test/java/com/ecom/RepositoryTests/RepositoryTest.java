@@ -43,6 +43,7 @@ public class RepositoryTest {
     @Test
     public void shouldNotFindUser() {
         String email = "nouser@test.com";
+        System.out.println("Rep: " + userRepository);
         Optional<User> user = userRepository.findByEmail(email);
         assertEquals(user.get(), null);
     }
@@ -58,6 +59,7 @@ public class RepositoryTest {
     @Test
     public void shouldFindProductById() {
         String id = "2c92c0817ca540f2017ca56305ff0003";
+        System.out.println("Rep: " + userRepository);
         Product product = productRepository.findByProductId(id);
         assertEquals(id, product.getProductId());
     }

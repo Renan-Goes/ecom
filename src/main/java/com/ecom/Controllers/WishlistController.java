@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
+@Api(value="Wishlist", description="Enables purchasing products.", tags={ "Wishlist" })
 public class WishlistController {
 
     private ProductRepository productRepository;
@@ -30,6 +34,7 @@ public class WishlistController {
     @PostMapping("/buy")
     @CacheEvict(value="productsCache", allEntries=true)
     @Transactional
+    @ApiOperation(value="Buys products from a list sent by the user, cannot purchase own products", tags={ "Product" })
     public ResponseEntity<?> addProducts(@RequestBody @Valid WishlistForm form) {
         return this.wishlistService.addProducts(form);
     }
