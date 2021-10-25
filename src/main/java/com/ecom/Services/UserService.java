@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.ecom.Config.Security.SecurityProperties;
 import com.ecom.Handlers.ExceptionDetails;
 import com.ecom.Models.Product;
 import com.ecom.Models.User;
@@ -12,26 +11,26 @@ import com.ecom.Models.DTOs.SignUpDTO;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 @Log4j2
+@RequiredArgsConstructor
+@Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private ProductRepository productRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, ProductRepository productRepository, 
-            PasswordEncoder passwordEncoder) {
-
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Value("${external.api.url}")
+    private String externalApiUrl;
     
     public ResponseEntity<?> createUser(User user) {
         Optional<User> foundUserOptional = userRepository.findByEmail(user.getEmail());
@@ -88,7 +87,7 @@ public class UserService {
             
             RestTemplate restTemplate = new RestTemplate();
             try {
-                restTemplate.delete(SecurityProperties.ENDPOINT_REMOVE_PRODUCT + 
+                restTemplate.delete(externalApiUrl + "/product/removeProduct/" +
                         productFromUser.getProductId());
             }
             catch(Exception e) {

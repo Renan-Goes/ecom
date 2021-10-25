@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.ecom.Config.Security.SecurityProperties;
 import com.ecom.Forms.WishlistForm;
 import com.ecom.Handlers.ExceptionDetails;
 import com.ecom.Models.Product;
@@ -14,19 +13,23 @@ import com.ecom.Models.DTOs.WishlistDTO;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class WishlistService {
 
-    private ProductRepository productRepository;
-    private UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public WishlistService(ProductRepository productRepository, UserRepository userRepository) {
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
-    }
+    @Value("${external.api.url}")
+    private String externalApiUrl;
     
     public ResponseEntity<?> addProducts(WishlistForm form) {
         
@@ -68,7 +71,7 @@ public class WishlistService {
             RestTemplate restTemplate = new RestTemplate();
             
             try {
-                restTemplate.delete(SecurityProperties.ENDPOINT_REMOVE_PRODUCT + 
+                restTemplate.delete(externalApiUrl + "/product/updateProduct/" + 
                         productInList.getProductId());
             }
             catch(Exception e) {

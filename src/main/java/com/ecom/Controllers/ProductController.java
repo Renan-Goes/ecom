@@ -28,21 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @Api(value="Product", description="Manages products to add, delete, list all, " +
         "list by user and list by part of name.", tags={ "Product" })
 public class ProductController {
      
-    private ProductRepository productRepository;
-    private UserRepository userRepository;
-    private ProductService productService;
-
-    public ProductController(ProductRepository productRepository, UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.productService = new ProductService(productRepository, userRepository);
-    }
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final ProductService productService;
 
     @PostMapping("/addproduct")
     @CacheEvict(value="productsCache", allEntries=true)

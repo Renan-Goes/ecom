@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class GetUserByTokenService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public GetUserByTokenService(UserRepository userRepository) {
         this.userRepository = userRepository;

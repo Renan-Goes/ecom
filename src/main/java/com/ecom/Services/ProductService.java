@@ -14,24 +14,27 @@ import com.ecom.Models.DTOs.ProductDTO;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@RequiredArgsConstructor
+@Service
 public class ProductService {
     
-    ProductRepository productRepository;
-    UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public ProductService(ProductRepository productRepository, UserRepository userRepository) {
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
-    }
+    @Value("${external.api.url}")
+    private String externalApiUrl;
 
     public ResponseEntity<?> addProduct(Product product) {
 
@@ -53,7 +56,7 @@ public class ProductService {
         try {    
             ProductRegister productToRegist = new ProductRegister(product);
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.postForObject(SecurityProperties.ENDPOINT_ADD_PRODUCT, productToRegist, 
+            restTemplate.postForObject(externalApiUrl + "/product", productToRegist, 
                     ProductRegister.class);
     
             ProductDTO productDTO = new ProductDTO(seller, product);

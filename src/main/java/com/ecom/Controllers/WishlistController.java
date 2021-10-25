@@ -16,20 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @Api(value="Wishlist", description="Enables purchasing products.", tags={ "Wishlist" })
 public class WishlistController {
 
-    private ProductRepository productRepository;
-    private UserRepository userRepository;
-    private WishlistService wishlistService;
-
-    public WishlistController(ProductRepository productRepository, UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.wishlistService = new WishlistService(productRepository, userRepository);
-    }
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final WishlistService wishlistService;
 
     @PostMapping("/buy")
     @CacheEvict(value="productsCache", allEntries=true)

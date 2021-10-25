@@ -3,7 +3,6 @@ package com.ecom.Controllers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.ecom.Forms.SignInForm;
 import com.ecom.Forms.SignUpForm;
 import com.ecom.Models.User;
 import com.ecom.Repository.ProductRepository;
@@ -19,23 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @RestController    
+@RequiredArgsConstructor
 @Api(value="User", description="Manages adding and deleting users.", tags={ "User" })
 public class UserController {
      
-    private UserRepository userRepository;
-    private UserService userService;
-    private ProductRepository productRepository;
-    private PasswordEncoder passwordEncoder;
-
-    public UserController(UserRepository userRepository, ProductRepository productRepository, 
-            PasswordEncoder passwordEncoder) {
-
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.userService = new UserService(userRepository, productRepository, passwordEncoder);
-    }
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final ProductRepository productRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/auth/signup")
     @Transactional
