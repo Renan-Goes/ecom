@@ -71,7 +71,7 @@ public class WishlistService {
             RestTemplate restTemplate = new RestTemplate();
             
             try {
-                restTemplate.delete(externalApiUrl + "/product/updateProduct/" + 
+                restTemplate.delete(externalApiUrl + "/product/removeProduct/" + 
                         productInList.getProductId());
             }
             catch(Exception e) {

@@ -52,6 +52,7 @@ public class ProductService {
 
         product.setUser(seller);
         productRepository.save(product);
+        System.out.println(externalApiUrl + "/product");
 
         try {    
             ProductRegister productToRegist = new ProductRegister(product);
@@ -210,7 +211,7 @@ public class ProductService {
             ProductRegister productToUpdateInRegist = new ProductRegister(foundProduct);
             RestTemplate restTemplate = new RestTemplate();
 
-            restTemplate.put(SecurityProperties.ENDPOINT_UPDATE_PRODUCT + foundProduct.getProductId(), 
+            restTemplate.put(externalApiUrl + "/product/updateProduct/" + foundProduct.getProductId(), 
                     productToUpdateInRegist, ProductRegister.class);      
                 }
         catch(Exception e) {

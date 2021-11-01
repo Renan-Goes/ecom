@@ -1,7 +1,6 @@
 version: '2.4'
 x-database-variables: &database-variables
   SPRING_DATASOURCE_URL: jdbc:mysql://ecom_db:3306/bootdb?createDatabaseIfNotExist=true
-  MANAGER_DATASOURCE_URL: jdbc:mysql://boot_db:3306/bootdb?createDatabaseIfNotExist=true
   EXTERNAL_API_URL: http://project-manager:8080
   SPRING_DATASOURCE_USERNAME: root
   SPRING_DATASOURCE_PASSWORD: root
@@ -17,17 +16,6 @@ services:
       - ecom_data:/var/lib/mysql
     networks:
       - ecom_db_network
-      
-  boot_db:
-    image: mysql
-    container_name: boot_db
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=bootdb
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - boot_db_network
 
   project-manager:
     image: renangoes/project-manager:latest
@@ -38,9 +26,12 @@ services:
     environment:
       <<: *database-variables
     depends_on:
-      - boot_db 
+      - ecom_db 
     networks:
+      - ecom_db_network
       - project_manager_network  
+    links:
+      - ecom_db
 
   ecom-api:
     image: renangoes/ecom-api:latest
@@ -54,6 +45,8 @@ services:
       <<: *database-variables
     depends_on:
       - ecom_db
+    links:
+      - ecom_db
       - project-manager
     networks:
       - ecom_db_network
@@ -61,9 +54,7 @@ services:
 
 volumes:
   ecom_data:
-  db_data:
 
 networks:
   ecom_db_network:
-  boot_db_network:
   project_manager_network:
