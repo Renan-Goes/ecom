@@ -4,8 +4,10 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.ecom.Forms.WishlistForm;
+import com.ecom.Models.User;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
+import com.ecom.Services.GetUserByTokenService;
 import com.ecom.Services.WishlistService;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,7 +34,10 @@ public class WishlistController {
     @Transactional
     @ApiOperation(value="Buys products from a list sent by the user, cannot purchase own products", tags={ "Product" })
     public ResponseEntity<?> addProducts(@RequestBody @Valid WishlistForm form) {
-        return this.wishlistService.addProducts(form);
+        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
+        User buyer = getUser.run();
+
+        return this.wishlistService.addProducts(form, buyer);
     }
     
 }

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
 
-import com.ecom.Config.Security.SecurityProperties;
 import com.ecom.Forms.UpdateProductForm;
 import com.ecom.Handlers.ExceptionDetails;
 import com.ecom.Models.Product;
@@ -36,10 +35,7 @@ public class ProductService {
     @Value("${external.api.url}")
     private String externalApiUrl;
 
-    public ResponseEntity<?> addProduct(Product product) {
-
-        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
-        User seller = getUser.run();
+    public ResponseEntity<?> addProduct(Product product, User seller) {
 
         if(seller == null) {
             log.debug("A non-existing user tried to add a product");
@@ -79,7 +75,6 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exception);
         }
     }
-    
             
     public ResponseEntity<?> getProducts(Pageable paging) {
         Page<Product> allProducts = productRepository.findAll(paging);
@@ -160,10 +155,7 @@ public class ProductService {
         return ResponseEntity.ok().body(pageWithProducts.getContent());
     }
 
-    public ResponseEntity<?> updateProduct(String productId, UpdateProductForm form) {
-
-        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
-        User user = getUser.run();
+    public ResponseEntity<?> updateProduct(String productId, UpdateProductForm form, User user) {
 
         Product foundProduct = productRepository.findByProductId(productId);
         
@@ -213,7 +205,7 @@ public class ProductService {
 
             restTemplate.put(externalApiUrl + "/product/updateProduct/" + foundProduct.getProductId(), 
                     productToUpdateInRegist, ProductRegister.class);      
-                }
+        }
         catch(Exception e) {
             ExceptionDetails exception = new ExceptionDetails("Bad Gateway", 502, 
             "Could not communicate with Registering API.", 

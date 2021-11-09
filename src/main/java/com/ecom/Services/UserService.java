@@ -48,6 +48,7 @@ public class UserService {
         foundUserOptional = userRepository.findByUserName(user.getUserName());
 
         if (!foundUserOptional.isEmpty()) {
+            System.out.println("Error 2");
             log.debug("Someone tried to create an account with the username " + user.getUserName() +
                     ", but an account already exists with the username");
             ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
@@ -69,11 +70,11 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.CREATED).body(signUpUser);
     }
 
-    public ResponseEntity<?> deleteUser() {
-        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
-        User user = getUser.run();
-        
+    public ResponseEntity<?> deleteUser(User user) {
+        System.out.println("Before check user");
+
         if(user == null) {
+            System.out.println("Token not found");
             log.debug("The user that was attempted to be deleted could not be found by token");
             ExceptionDetails exception = new ExceptionDetails("Bad Request", 400, 
                     "User was not found by token.", "Try to login in your account.", new Date());
@@ -81,6 +82,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
         }
 
+        System.out.println("Before product repository find and after get token");
         List<Product> listOfProductsFromUser = productRepository.findByUserUserName(user.getUserName());
 
         for(Product productFromUser : listOfProductsFromUser) {
@@ -101,7 +103,9 @@ public class UserService {
             productRepository.deleteById(productFromUser.getProductId());
         }
 
+        System.out.println("Before delete");
         userRepository.deleteById(user.getUserId());
+        System.out.println("After get token");
 
         log.debug("Use '" + user.getUserName() + "' was deleted, along with its products for sale");
         ExceptionDetails exception = new ExceptionDetails("OK", 200, 

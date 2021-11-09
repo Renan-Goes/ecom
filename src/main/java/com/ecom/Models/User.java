@@ -14,17 +14,17 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class User {
-
+    
+	@Column(name="id")
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid")
-	@Column(name="USER_ID")
     private String userId;
 
     @Column(unique=true)
     private String email;
     private String password;
-    @Column(unique=true)
+    @Column(unique=true, name="name")
     private String userName;    
 
     public User(String email, String password, String userName) {

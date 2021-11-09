@@ -47,7 +47,10 @@ public class ProductController {
     public ResponseEntity<?> addProduct(@RequestBody @Valid ProductForm form) {
         Product product = form.convert();
         
-        return productService.addProduct(product);
+        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
+        User seller = getUser.run();
+        
+        return productService.addProduct(product, seller);
     }
 
     @GetMapping("/products")
@@ -99,6 +102,10 @@ public class ProductController {
     @Transactional
     public ResponseEntity<?> updateProduct(@PathVariable String productId, 
             @RequestBody UpdateProductForm form) {
-        return productService.updateProduct(productId, form);
+                
+        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
+        User user = getUser.run();
+
+        return productService.updateProduct(productId, form, user);
     }
 }

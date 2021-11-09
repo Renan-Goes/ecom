@@ -7,6 +7,7 @@ import com.ecom.Forms.SignUpForm;
 import com.ecom.Models.User;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
+import com.ecom.Services.GetUserByTokenService;
 import com.ecom.Services.UserService;
 
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,8 @@ public class UserController {
     @Transactional
     @ApiOperation(value="Deletes the user alongside the products it has for sale", tags={ "Product" })
     public ResponseEntity<?> deleteUser() {
-        return userService.deleteUser();
+        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
+        User user = getUser.run();
+        return userService.deleteUser(user);
     }
 }

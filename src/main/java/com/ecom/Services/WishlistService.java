@@ -31,10 +31,7 @@ public class WishlistService {
     @Value("${external.api.url}")
     private String externalApiUrl;
     
-    public ResponseEntity<?> addProducts(WishlistForm form) {
-        
-        GetUserByTokenService getUser = new GetUserByTokenService(this.userRepository);
-        User buyer = getUser.run();
+    public ResponseEntity<?> addProducts(WishlistForm form, User buyer) {
 
         List<Product> listOfProductsToBuy = new ArrayList<>();
         
@@ -79,7 +76,7 @@ public class WishlistService {
                         "Could not communicate with external server.", 
                         "Either the server is down or the product has not been registered.", new Date());
 
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exception);
             }
 
             productRepository.deleteById(productInList.getProductId());

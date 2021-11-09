@@ -16,14 +16,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name="PRODUCTS")
+@Entity
 @Getter @Setter @NoArgsConstructor
 public class Product {
     
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid")
-	@Column(name="PRODUCT_ID")
 	private String productId;
 
     @Column
@@ -34,7 +33,7 @@ public class Product {
     private String description;
     
     @ManyToOne()
-    @JoinColumn(name="USER_ID", nullable=false, updatable=false)
+    @JoinColumn(name="id", nullable=false, updatable=false)
     private User user;
 
     public Product(String name, BigDecimal price, String description) {
