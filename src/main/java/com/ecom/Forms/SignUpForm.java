@@ -7,9 +7,11 @@ import javax.validation.constraints.Size;
 
 import com.ecom.Models.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class SignUpForm {
     
     @NotEmpty

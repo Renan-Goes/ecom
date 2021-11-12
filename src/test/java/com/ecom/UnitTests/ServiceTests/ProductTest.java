@@ -1,4 +1,4 @@
-package com.ecom.ServiceTests;
+package com.ecom.UnitTests.ServiceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -132,6 +132,17 @@ public class ProductTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("test2", productName);
+    }
+    
+    @Test
+    public void shouldNotGetAllProductsFromUserBecauseUserIsInvalid() {
+        Pageable paging = PageRequest.of(0, 10);
+
+        when(userRepository.findByUserName(Mockito.any())).thenReturn(Optional.empty());
+        
+        ResponseEntity<?> response = productService.getProductByUser("testname", paging);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
     
     @Test

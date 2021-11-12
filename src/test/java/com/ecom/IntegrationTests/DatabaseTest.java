@@ -1,4 +1,4 @@
-package com.ecom.RepositoryTests;
+package com.ecom.IntegrationTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,20 +12,17 @@ import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.doAnswer;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class RepositoryTest {
+public class DatabaseTest {
     
     @Autowired
     private UserRepository userRepository;
@@ -34,7 +31,7 @@ public class RepositoryTest {
     private ProductRepository productRepository;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() {        
         String email = "email@test.com";
         String password = "password";
         String userName = "username";
@@ -65,9 +62,17 @@ public class RepositoryTest {
     }    
 
     @Test
+    public void shouldDeleteUser() {
+        userRepository.deleteById("206977cf-c90e-4593-949c-119a69cd813f");
+        Optional<User> foundUser = userRepository.findByEmail("test@test.com");
+
+        assertEquals(false, foundUser.isPresent());
+    }
+
+    @Test
     public void shouldFindProductById() {
         Product product = new Product("product name", new BigDecimal("10.0"), "product description");
-        User user = new User("test@test.com", "password", "testname");
+        User user = new User("test2@test.com", "password", "testname2");
         userRepository.save(user);
         product.setUser(user);
 
@@ -76,7 +81,6 @@ public class RepositoryTest {
         Product foundProduct = productRepository.findByProductId(product.getProductId());
 
         assertEquals("product name", foundProduct.getName());
-
     }
 
     @Test
@@ -85,6 +89,14 @@ public class RepositoryTest {
         System.out.println("Rep: " + userRepository);
         Product product = productRepository.findByProductId(id);
         assertEquals(product, null);
+    }
+
+    @Test
+    public void shouldDeleteProduct() {
+        productRepository.deleteById("23c91e3f-e535-4878-90a4-8cacef92a510");
+        Product foundProduct = productRepository.findByProductId("23c91e3f-e535-4878-90a4-8cacef92a510");
+
+        assertEquals(null, foundProduct);
     }
 }
 

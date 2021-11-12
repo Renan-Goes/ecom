@@ -1,4 +1,4 @@
-package com.ecom.ServiceTests;
+package com.ecom.UnitTests.ServiceTests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -39,16 +39,9 @@ public class UserTest {
     @MockBean
     private PasswordEncoder passwordEncoder;
 
-    @MockBean
-    private Authentication authentication;
-    @MockBean
-    private SecurityContext securityContext;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
     }
 
     @AfterEach

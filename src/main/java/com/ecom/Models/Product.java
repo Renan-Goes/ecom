@@ -33,7 +33,7 @@ public class Product {
     private String description;
     
     @ManyToOne()
-    @JoinColumn(name="id", nullable=false, updatable=false)
+    @JoinColumn(name="user_id", nullable=false, updatable=false)
     private User user;
 
     public Product(String name, BigDecimal price, String description) {

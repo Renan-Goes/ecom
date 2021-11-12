@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class User {
     
-	@Column(name="id")
+	@Column
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid")
@@ -24,7 +24,7 @@ public class User {
     @Column(unique=true)
     private String email;
     private String password;
-    @Column(unique=true, name="name")
+    @Column(unique=true)
     private String userName;    
 
     public User(String email, String password, String userName) {

@@ -48,7 +48,6 @@ public class ProductService {
 
         product.setUser(seller);
         productRepository.save(product);
-        System.out.println(externalApiUrl + "/product");
 
         try {    
             ProductRegister productToRegist = new ProductRegister(product);
@@ -121,7 +120,7 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
         }
 
-        if(foundProduct.getUser().getUserName() != userName) {
+        if(!foundProduct.getUser().getUserName().equals(userName)) {
             log.debug("'" + userName + "' is not the same the owner of the product ('" + 
                     foundProduct.getUser().getUserName() + "')");
 
@@ -169,7 +168,7 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
         }
 
-        if(foundProduct.getUser().getUserName() != user.getUserName()) {
+        if(!foundProduct.getUser().getUserName().equals(user.getUserName())) {                    
             log.debug("User '" + user.getUserName() + "' tried to update a product of '" + 
                     foundProduct.getUser().getUserName() + "'");
 

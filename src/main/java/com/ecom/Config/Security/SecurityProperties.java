@@ -10,8 +10,4 @@ public class SecurityProperties {
     public static final String SWAGGER_URL2 = "/webjars/**";
     public static final String SWAGGER_URL3 = "/v2/**";
     public static final String SWAGGER_URL4 = "/swagger-resources/**";
-    public static final String EXTERNAL_API_URL = "http://localhost:8080/product";
-    public static final String ENDPOINT_ADD_PRODUCT = EXTERNAL_API_URL;
-    public static final String ENDPOINT_REMOVE_PRODUCT = EXTERNAL_API_URL + "/removeProduct/";
-    public static final String ENDPOINT_UPDATE_PRODUCT = EXTERNAL_API_URL + "/updateProduct/";
 }

@@ -1,4 +1,4 @@
-package com.ecom.ServiceTests;
+package com.ecom.UnitTests.ServiceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

@@ -1,4 +1,4 @@
-package com.ecom.ServiceTests;
+package com.ecom.UnitTests.ServiceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -8,32 +8,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.ecom.Forms.UpdateProductForm;
 import com.ecom.Forms.WishlistForm;
 import com.ecom.Models.Product;
 import com.ecom.Models.User;
-import com.ecom.Models.Wishlist;
-import com.ecom.Models.DTOs.ProductDTO;
-import com.ecom.Models.DTOs.WishlistDTO;
 import com.ecom.Repository.ProductRepository;
 import com.ecom.Repository.UserRepository;
-import com.ecom.Services.ProductService;
 import com.ecom.Services.WishlistService;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;

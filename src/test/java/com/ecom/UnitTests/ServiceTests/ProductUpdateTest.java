@@ -1,4 +1,4 @@
-package com.ecom.ServiceTests;
+package com.ecom.UnitTests.ServiceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -80,12 +80,12 @@ public class ProductUpdateTest {
         when(productRepository.findByProductId(Mockito.any())).thenReturn(product);
 
         wireMockServer.stubFor(put(urlEqualTo(PRODUCT_UPDATE_URL + product.getProductId()))
-        .withHeader("Content-Type", equalTo("application/json"))
-        .willReturn(aResponse().withStatus(200)
-        .withHeader("Content-Type", "application/json")
-        .withBody("{\"productId\":\"01\",\"name\":\"A product I'm selling\"," +
-                "\"price\":\"10.0\"," +
-                "\"user\":\"testname\"}")));
+            .withHeader("Content-Type", equalTo("application/json"))
+            .willReturn(aResponse().withStatus(200)
+            .withHeader("Content-Type", "application/json")
+            .withBody("{\"productId\":\"01\",\"name\":\"A product I\'m selling\"," +
+                    "\"price\":\"10.0\"," +
+                    "\"user\":\"testname\"}")));
         
         when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
 
