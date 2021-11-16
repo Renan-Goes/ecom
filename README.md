@@ -8,7 +8,7 @@ To run the project, you only have to run the command "docker-compose up" in the 
 
 The documentation can also be found using Swagger through the path: "http://localhost:8081/swagger-ui/index.html#/".
 
-In other to run the Integral tests, the external API must be up, it only needs to be run by using "docker-compose up", same as our ecom API. Once running, the tests of communication between API's should work. The product-manager project can be found here: https://github.com/Renan-Goes/products-manager
+In other to run the Integral tests, the external API must be up, it only needs to be run by using "mvn spring-boot:run" in the root directory of the project. The product-manager project can be found here: https://github.com/Renan-Goes/products-manager
 
 ## What was used for the project?
 The application was developed using the following technologies:
